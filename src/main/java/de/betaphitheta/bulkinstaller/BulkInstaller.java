@@ -6,8 +6,6 @@ package de.betaphitheta.bulkinstaller;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
