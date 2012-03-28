@@ -4,6 +4,9 @@
  */
 package de.betaphitheta.bulkinstaller;
 
+import de.betaphitheta.tutorials.filepreparerule.DirectorySetup;
+import de.betaphitheta.tutorials.filepreparerule.FilePrepareRule;
+import de.betaphitheta.tutorials.filepreparerule.FileSetup;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Bundle;
 import org.junit.Before;
@@ -21,6 +24,8 @@ import org.osgi.framework.Version;
  *
  * @author peter
  */
+@DirectorySetup(directory="./tmp/testJar")
+@FileSetup(files={"test.jar", "test.war"})
 public class BulkInstallerTest {
 
     ByteArrayOutputStream errStream;
@@ -30,7 +35,8 @@ public class BulkInstallerTest {
     BundleContext context;
 
     @Rule
-    public FilePrepareRule r = new FilePrepareRule("/tmp/testJar");
+    public FilePrepareRule r = new FilePrepareRule();
+    private final String testJarFolder = "./tmp/testJar";
     
     public BulkInstallerTest() {
     }
@@ -61,40 +67,40 @@ public class BulkInstallerTest {
 
     @Test
     public void bulkInstallFailed() throws BundleException {
-        when(context.installBundle("file:/tmp/testJar/test.jar")).thenThrow(new BundleException("Bundle not found!"));
-        installer.bulkInstall("/tmp/testJar", "test.jar");
+        when(context.installBundle("file:" +testJarFolder + "/test.jar")).thenThrow(new BundleException("Bundle not found!"));
+        installer.bulkInstall(testJarFolder, "test.jar");
         String errMessage = errStream.toString().trim();
         assertTrue(errMessage.contains("Bundle not found!"));
     }
 
     @Test
     public void bulkInstallNoFilesFound() {
-        installer.bulkInstall("/tmp/testJar", ".*.jra");
+        installer.bulkInstall(testJarFolder, ".*.jra");
         String errorMessage = errStream.toString().trim();
-        assertEquals("No matching files found in /tmp/testJar", errorMessage);
+        assertEquals("No matching files found in " + testJarFolder, errorMessage);
     }
     
     @Test
     public void bulkInstallDirectoryNotFound() {
-        installer.bulkInstall("/tmper/", ".*.jar");
+        installer.bulkInstall("./tmper/", ".*.jar");
         String errorMessage = errStream.toString().trim();
-        assertEquals("Directory /tmper/ not found!", errorMessage);
+        assertEquals("Directory ./tmper/ not found!", errorMessage);
     }
 
     @Test
     public void bulkInstallWithSuffixes() throws BundleException {
-        when(context.installBundle("file:/tmp/testJar/test.jar")).thenReturn(bundle);
-        when(context.installBundle("file:/tmp/testJar/test.war")).thenReturn(bundle);
+        when(context.installBundle("file:" +testJarFolder + "/test.jar")).thenReturn(bundle);
+        when(context.installBundle("file:" +testJarFolder + "/test.war")).thenReturn(bundle);
         String[] suffixes = {"jar", "war"};
-        installer.bulkInstall("/tmp/testJar", "test", suffixes);
+        installer.bulkInstall(testJarFolder, "test", suffixes);
         String infoMessage = outStream.toString().trim();
         assertEquals("de.betaphitheta.bulkinstaller.Test with version 1.0.0 installed under id 1\nde.betaphitheta.bulkinstaller.Test with version 1.0.0 installed under id 1", infoMessage);
     }
 
     @Test
     public void bulkInstallWithoutSuffixes() throws BundleException {
-        when(context.installBundle("file:/tmp/testJar/test.jar")).thenReturn(bundle);
-        installer.bulkInstall("/tmp/testJar", "test.jar");
+        when(context.installBundle("file:" +testJarFolder + "/test.jar")).thenReturn(bundle);
+        installer.bulkInstall(testJarFolder, "test.jar");
         String infoMessage = outStream.toString().trim();
         assertEquals(infoMessage, "de.betaphitheta.bulkinstaller.Test with version 1.0.0 installed under id 1");
     }
