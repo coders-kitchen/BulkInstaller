@@ -9,6 +9,8 @@ import java.io.FilenameFilter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
+import org.apache.felix.service.command.Descriptor;
+import org.apache.felix.service.command.Parameter;
 
 /**
  *
@@ -22,11 +24,16 @@ public class BulkInstaller {
         this.bundleContext = bundleContext;
     }
 
-    public void bulkInstall(String directory, String filePatter) {
+    @Descriptor("installs every bundle from a directory, which matches a filename pattern")
+    public void bulkInstall(@Descriptor("the directory where the files are located") String directory,
+            @Descriptor("the basic pattern for filenames") String filePatter) {
         bulkInstall(directory, filePatter, null);
     }
 
-    public void bulkInstall(String directory, String filePatter, String[] suffixes) {
+    @Descriptor("installs every bundle from a directory, which matches a filename pattern and one of the suffixes")
+    public void bulkInstall(@Descriptor("the directory where the files are located") String directory,
+            @Descriptor("the basic pattern for filenames") String filePatter,
+            @Descriptor("list of file suffixes") String[] suffixes) {
         File f = new File(directory);
         if (!f.exists()) {
             System.err.println("Directory " + directory + " not found!");
@@ -46,8 +53,8 @@ public class BulkInstaller {
         if (suffixesPattern.length() != 0) {
             suffixesPattern = ".?(" + suffixesPattern + ")";
         }
-            
-        
+
+
         String[] list = f.list(new PatternFilter(filePatter + suffixesPattern));
         if (list == null || list.length == 0) {
             System.err.println("No matching files found in " + directory);
