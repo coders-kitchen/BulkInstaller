@@ -46,7 +46,8 @@ public class BulkInstaller {
         if (suffixesPattern.length() != 0) {
             suffixesPattern = ".?(" + suffixesPattern + ")";
         }
-
+            
+        
         String[] list = f.list(new PatternFilter(filePatter + suffixesPattern));
         if (list == null || list.length == 0) {
             System.err.println("No matching files found in " + directory);

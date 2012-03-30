@@ -104,4 +104,12 @@ public class BulkInstallerTest {
         String infoMessage = outStream.toString().trim();
         assertEquals(infoMessage, "de.betaphitheta.bulkinstaller.Test with version 1.0.0 installed under id 1");
     }
+    
+    @Test
+    public void bulkInstallWithMatching() throws BundleException {
+        when(context.installBundle("file:" +testJarFolder + "/test.jar")).thenReturn(bundle);
+        installer.bulkInstall(testJarFolder, ".*.jar");
+        String infoMessage = outStream.toString().trim();
+        assertEquals(infoMessage, "de.betaphitheta.bulkinstaller.Test with version 1.0.0 installed under id 1");
+    }
 }
