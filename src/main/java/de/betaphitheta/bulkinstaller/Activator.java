@@ -4,6 +4,10 @@ import java.util.Hashtable;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+/**
+ * This activator simply registers the bulkInstall command at the tutorial scope.
+ * @author peter
+ */
 public class Activator implements BundleActivator {
 
     public void start(BundleContext context) throws Exception {

@@ -10,10 +10,12 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.apache.felix.service.command.Descriptor;
-import org.apache.felix.service.command.Parameter;
 
 /**
- *
+ * This class represents the implementation of a bulk install command for the gogo shell of Apache Felix.
+ * 
+ * It provides to methods. One for installing bundles from a directory, where the jar files matches a given pattern.
+ * The other one does the same, but also takes care of a set of file suffixes for selection of bundle jars.
  * @author peter
  */
 public class BulkInstaller {
